@@ -1,0 +1,94 @@
+{
+  "info": {
+    "_postman_id": "7e7b03e0-ab1b-45bd-8e01-a83013abf133",
+    "name": "TechMart API Test Suite",
+    "description": "API automation suite covering authentication,  \nuser management, products, cart and order workflows.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "7821747",
+    "_collection_link": "https://go.postman.co/collection/7821747-7e7b03e0-ab1b-45bd-8e01-a83013abf133?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": []
+    },
+    {
+      "name": "User Management",
+      "item": []
+    },
+    {
+      "name": "Product Management",
+      "item": []
+    },
+    {
+      "name": "Shopping Cart",
+      "item": []
+    },
+    {
+      "name": "Order Management",
+      "item": []
+    },
+    {
+      "name": "Admin APIs",
+      "item": []
+    },
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Verify API Availability",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();\r",
+                  "pm.test(\"Status code should be  200\", function() {\r",
+                  "\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time should be less  than 2 seconds\", function(){\r",
+                  "\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Status should be ok\", function(){\r",
+                  "\r",
+                  "    pm.expect(response.status).to.eql(\"ok\");\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Method should be Get\", function() {\r",
+                  "\r",
+                  "    pm.expect(response.method).to.eql(\"GET\");\r",
+                  "\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/test",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "test"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
