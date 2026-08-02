@@ -10,7 +10,135 @@
   "item": [
     {
       "name": "Authentication",
-      "item": []
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "\r",
+                  "    pm.response.to.have.status(200)\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time is below 2000 ms\", function() {\r",
+                  "\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Token is returned\", function() {\r",
+                  "\r",
+                  "   pm.expect(response.accessToken).not.be.undefined;\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.environment.set(\"token\",response.accessToken);\r",
+                  "\r",
+                  "console.log(\"Access tokem saved successfully\");"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"emilys\",\r\n  \"password\": \"emilyspass\",\r\n  \"expiresInMins\": 30\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://dummyjson.com/auth/login",
+              "protocol": "https",
+              "host": [
+                "dummyjson",
+                "com"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status code  is 200\", function() {\r",
+                  "\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Username exists\", function() {\r",
+                  "\r",
+                  "    pm.expect(response.username).to.exist;\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Email Exists\", function() {\r",
+                  "\r",
+                  "    pm.expect(response.email).to.exist;\r",
+                  "\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}auth/me",
+              "host": [
+                "{{base_url}}auth"
+              ],
+              "path": [
+                "me"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     },
     {
       "name": "User Management",
@@ -18,7 +146,460 @@
     },
     {
       "name": "Product Management",
-      "item": []
+      "item": [
+        {
+          "name": "Get All Products",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status code is 200\", function() {\r",
+                  "\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Product array exists\", function() {\r",
+                  "\r",
+                  "    pm.expect(response.products).to.be.an(\"array\");\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"At least one product is returned\", function() {\r",
+                  "\r",
+                  "    pm.expect(response.products.length).to.be.above(0);\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time under 2 seconds\", function() {\r",
+                  "\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+                  "\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}products",
+              "host": [
+                "{{base_url}}products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product By Id",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Search Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status code is 200\", function() {\r",
+                  "\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time is less than 2000 ms\", function() {\r",
+                  "\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Product array exists\", function() {\r",
+                  "\r",
+                  "    pm.expect(response.products).to.be.an(\"array\");\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Product is not empty\", function() {\r",
+                  "    pm.expect(response.products).to.have.length.above(0);\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}products/search?q={{searchKeyword}}",
+              "host": [
+                "{{base_url}}products"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "{{searchKeyword}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Product created\", function() {\r",
+                  "\r",
+                  "    pm.expect(response.id).to.exist;\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.environment.set(\"productId\",response.id);\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Enterprise Test Product\",\r\n  \"price\": 999,\r\n  \"category\": \"smartphones\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}products/add",
+              "host": [
+                "{{base_url}}products"
+              ],
+              "path": [
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Price Updated\", function() {\r",
+                  "\r",
+                  "    pm.expect(response.price).to.equal(899);\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"price\": 899\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}products/{{productId}}",
+              "host": [
+                "{{base_url}}products"
+              ],
+              "path": [
+                "{{productId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Delete request Successful\", function() {\r",
+                  "\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}products/{{productId}}",
+              "host": [
+                "{{base_url}}products"
+              ],
+              "path": [
+                "{{productId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Regression Suite",
+      "item": [
+        {
+          "name": "Get All Products",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status code is 200\", function() {\r",
+                  "\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Product array exists\", function() {\r",
+                  "\r",
+                  "    pm.expect(response.products).to.be.an(\"array\");\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"At least one product is returned\", function() {\r",
+                  "\r",
+                  "    pm.expect(response.products.length).to.be.above(0);\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time under 2 seconds\", function() {\r",
+                  "\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+                  "\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}products",
+              "host": [
+                "{{base_url}}products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product By Id",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Search Product",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Add Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Product created\", function() {\r",
+                  "\r",
+                  "    pm.expect(response.id).to.exist;\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.environment.set(\"productId\",response.id);\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Enterprise Test Product\",\r\n  \"price\": 999,\r\n  \"category\": \"smartphones\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}products/add",
+              "host": [
+                "{{base_url}}products"
+              ],
+              "path": [
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Price Updated\", function() {\r",
+                  "\r",
+                  "    pm.expect(response.price).to.equal(899);\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"price\": 899\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}products/{{productId}}",
+              "host": [
+                "{{base_url}}products"
+              ],
+              "path": [
+                "{{productId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Delete request Successful\", function() {\r",
+                  "\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}products/{{productId}}",
+              "host": [
+                "{{base_url}}products"
+              ],
+              "path": [
+                "{{productId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     },
     {
       "name": "Shopping Cart",
